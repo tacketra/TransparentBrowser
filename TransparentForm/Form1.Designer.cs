@@ -1,4 +1,6 @@
-﻿namespace TransparentForm
+﻿using System.Windows.Forms;
+
+namespace TransparentForm
 {
     partial class Form1
     {
@@ -28,10 +30,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.SuspendLayout();
+            // 
+            // Form1
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            //this.ClientSize = new System.Drawing.Size(2278, 1244);
+            // this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "Form1";
+            this.Opacity = 1;//0.5D;
             this.Text = "Form1";
-            this.Opacity = .5;
+            // this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.ResumeLayout(false);
+            // this.Size = Screen.AllScreens[1].WorkingArea.Size;
+            this.Location = new System.Drawing.Point(0, 0);
+
+
+
         }
 
         #endregion
