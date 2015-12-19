@@ -6,3 +6,6 @@ c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\Transparent
 c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.csproj.GenerateResource.Cache
 c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.exe
 c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.pdb
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\bin\Debug\TransparentForm.exe.config
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.exe
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.pdb
