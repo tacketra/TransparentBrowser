@@ -22,6 +22,9 @@ namespace TransparentForm
         public Form1()
         {
             InitializeComponent();
+
+            this.TopMost = true;
+
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.UserPaint, true);
 
@@ -239,9 +242,10 @@ namespace TransparentForm
 
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
-        
+
         private TrackBar trackBar1;
         private Label scrollLabel = new Label();
+        private CheckBox lockPage = new CheckBox();
 
         private void InitializeForm()
         {
@@ -341,6 +345,9 @@ namespace TransparentForm
             this.trackBar1.Location = new System.Drawing.Point(scrollLabel.Right + 2);
             this.trackBar1.Size = new System.Drawing.Size(224, 10);
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            lockPage.Text = "Lock Page ";
+            this.lockPage.Location = new Point(trackBar1.Right + 2);
+            this.lockPage.CheckedChanged += new EventHandler(this.lockPage_Check);
 
             // The Maximum property sets the value of the track bar when
             // the slider is all the way to the right.
@@ -368,6 +375,7 @@ namespace TransparentForm
             //    statusStrip1, menuStrip1, trackBar1, scrollLabel, menuStrip1});
             Controls.Add(scrollLabel);
             Controls.Add(trackBar1);
+            Controls.Add(lockPage);
 
             Controls.AddRange(new Control[] {
                 webBrowser1, toolStrip1, toolStrip2,
@@ -381,11 +389,109 @@ namespace TransparentForm
         {
             var stuff = trackBar1;
             scrollLabel.Text = "Transparency: " + trackBar1.Value;
-            this.Opacity = ((trackBar1.Value * -1) + 100) /100d;
+            this.Opacity = ((trackBar1.Value * -1) + 100) / 100d;
             //string hey = "hello";
 
             //trackBar1.BackColor = Color.FromArgb(250, trackBar1.BackColor.R, trackBar1.BackColor.G, trackBar1.BackColor.B);
         }
+
+        private void lockPage_Check(object sender, EventArgs e)
+        {
+            if (lockPage.Checked)
+            {
+                /* have to set to formWindowState.normal because some weird bug where if windows form
+                is already full screen (but not covering task bar) maximizing won't cover task bar?*/
+                this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+                this.Bounds = Screen.PrimaryScreen.Bounds;
+    
+                //this.TransparencyKey = SystemColors.Control;
+                // this.BackColor = SystemColors.Control;
+                this.TopMost = true;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Maximized;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            }
+        }
+
+
+
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                if (!lockPage.Checked) return base.CreateParams;
+
+                CreateParams createParams = base.CreateParams;
+                createParams.ExStyle |= 0x00000020; // WS_EX_TRANSPARENT
+
+                return createParams;
+            }
+        }
+
+
+
+        private const int WM_MOUSEACTIVATE = 0x0021, MA_NOACTIVATE = 0x0003;
+
+        //protected override void WndProc(ref Message m)
+        //{
+        //    if (m.Msg == WM_MOUSEACTIVATE)
+        //    {
+        //        m.Result = (IntPtr)MA_NOACTIVATE;
+
+        //        if (lockPage.Checked)
+        //        {
+        //            m.Msg = MA_NOACTIVATE;
+        //            base.WndProc(ref m);
+        //        }
+
+        //        return;
+        //    }
+
+        //    base.WndProc(ref m);
+        //}
+
+        //// Code for allowing clicking through of the form
+        //protected override void WndProc(ref Message m)
+        //{
+        //    const uint WM_NCHITTEST = 0x84;
+
+        //    const int HTTRANSPARENT = -1;
+        //    const int HTCLIENT = 1;
+        //    const int HTCAPTION = 2;
+        //    // ... or define an enum with all the values
+
+        //    if (m.Msg == WM_NCHITTEST)
+        //    {
+        //        // If it's the message we want, handle it.
+        //        if (!lockPage.Checked)
+        //        {
+        //            // If we're drawing, we want to see mouse events like normal.
+        //            m.Result = new IntPtr(HTCLIENT);
+        //        }
+        //        else
+        //        {
+        //            // Otherwise, we want to pass mouse events on to the desktop,
+        //            // as if we were not even here.
+        //            m.Result = new IntPtr(HTTRANSPARENT);
+        //        }
+
+        //        return;  // bail out because we've handled the message
+        //    }
+
+        //    if (lockPage.Checked)
+        //    {
+        //        m.Result = new IntPtr(HTTRANSPARENT);
+        //        // return;
+        //    }
+
+        //    // Otherwise, call the base class implementation for default processing.
+        //    base.WndProc(ref m);
+        //}
 
         //public Form1()
         //{
