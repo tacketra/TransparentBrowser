@@ -1,0 +1,8 @@
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\bin\Debug\TransparentForm.exe.config
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\bin\Debug\TransparentForm.exe
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\bin\Debug\TransparentForm.pdb
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.csprojResolveAssemblyReference.cache
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.Properties.Resources.resources
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.csproj.GenerateResource.Cache
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.exe
+c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\TransparentForm\obj\Debug\TransparentForm.pdb
