@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,11 +18,12 @@ namespace TransparentForm
     {
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
-        public bool alreadyUsed = false; //dlete this
 
         public Form1()
         {
             InitializeComponent();
+
+            // this.Load += new EventHandler(Form1_Load);
 
             this.TopMost = true;
 
@@ -44,17 +46,10 @@ namespace TransparentForm
                 new EventHandler(webBrowser1_StatusTextChanged);
 
             Navigate("http://www.netflix.com/browse");
-            //webBrowser1.GoHome();
         }
 
         private void Form1_HandleCreated(object sender, System.EventArgs e, string app)
         {
-
-            int count = 1;
-            //var clientApplication = Process.Start(app);
-
-
-            //SetParent(clientApplication.MainWindowHandle, this.Handle);
         }
 
         // Displays the Save dialog box.
@@ -245,7 +240,7 @@ namespace TransparentForm
 
         private TrackBar trackBar1;
         private Label scrollLabel = new Label();
-        private CheckBox lockPage = new CheckBox();
+        public static CheckBox lockPage = new CheckBox();
 
         private void InitializeForm()
         {
@@ -346,8 +341,8 @@ namespace TransparentForm
             this.trackBar1.Size = new System.Drawing.Size(224, 10);
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             lockPage.Text = "Lock Page ";
-            this.lockPage.Location = new Point(trackBar1.Right + 2);
-            this.lockPage.CheckedChanged += new EventHandler(this.lockPage_Check);
+            Form1.lockPage.Location = new Point(trackBar1.Right + 2);
+            Form1.lockPage.CheckedChanged += new EventHandler(lockPage_Check);
 
             // The Maximum property sets the value of the track bar when
             // the slider is all the way to the right.
@@ -365,14 +360,6 @@ namespace TransparentForm
             // if the keyboard arrows are used to move the slider.
             trackBar1.SmallChange = 5;
 
-            //Controls.AddRange(new Control[] {
-            //    webBrowser1, toolStrip2, toolStrip1,
-            //    menuStrip1, statusStrip1, menuStrip1});
-
-
-            //Controls.AddRange(new Control[] {
-            //    webBrowser1, toolStrip2, toolStrip1,
-            //    statusStrip1, menuStrip1, trackBar1, scrollLabel, menuStrip1});
             Controls.Add(scrollLabel);
             Controls.Add(trackBar1);
             Controls.Add(lockPage);
@@ -380,9 +367,6 @@ namespace TransparentForm
             Controls.AddRange(new Control[] {
                 webBrowser1, toolStrip1, toolStrip2,
                 statusStrip1});
-
-            //Controls.Add(trackBar1);
-            string heyer = "hey";
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -390,9 +374,6 @@ namespace TransparentForm
             var stuff = trackBar1;
             scrollLabel.Text = "Transparency: " + trackBar1.Value;
             this.Opacity = ((trackBar1.Value * -1) + 100) / 100d;
-            //string hey = "hello";
-
-            //trackBar1.BackColor = Color.FromArgb(250, trackBar1.BackColor.R, trackBar1.BackColor.G, trackBar1.BackColor.B);
         }
 
         private void lockPage_Check(object sender, EventArgs e)
@@ -405,10 +386,6 @@ namespace TransparentForm
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                 this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
                 this.Bounds = Screen.PrimaryScreen.Bounds;
-    
-                //this.TransparencyKey = SystemColors.Control;
-                // this.BackColor = SystemColors.Control;
-                this.TopMost = true;
             }
             else
             {
@@ -417,13 +394,12 @@ namespace TransparentForm
             }
         }
 
-
-
-
         protected override CreateParams CreateParams
         {
             get
             {
+                //return base.CreateParams;
+
                 if (!lockPage.Checked) return base.CreateParams;
 
                 CreateParams createParams = base.CreateParams;
@@ -432,70 +408,5 @@ namespace TransparentForm
                 return createParams;
             }
         }
-
-
-
-        private const int WM_MOUSEACTIVATE = 0x0021, MA_NOACTIVATE = 0x0003;
-
-        //protected override void WndProc(ref Message m)
-        //{
-        //    if (m.Msg == WM_MOUSEACTIVATE)
-        //    {
-        //        m.Result = (IntPtr)MA_NOACTIVATE;
-
-        //        if (lockPage.Checked)
-        //        {
-        //            m.Msg = MA_NOACTIVATE;
-        //            base.WndProc(ref m);
-        //        }
-
-        //        return;
-        //    }
-
-        //    base.WndProc(ref m);
-        //}
-
-        //// Code for allowing clicking through of the form
-        //protected override void WndProc(ref Message m)
-        //{
-        //    const uint WM_NCHITTEST = 0x84;
-
-        //    const int HTTRANSPARENT = -1;
-        //    const int HTCLIENT = 1;
-        //    const int HTCAPTION = 2;
-        //    // ... or define an enum with all the values
-
-        //    if (m.Msg == WM_NCHITTEST)
-        //    {
-        //        // If it's the message we want, handle it.
-        //        if (!lockPage.Checked)
-        //        {
-        //            // If we're drawing, we want to see mouse events like normal.
-        //            m.Result = new IntPtr(HTCLIENT);
-        //        }
-        //        else
-        //        {
-        //            // Otherwise, we want to pass mouse events on to the desktop,
-        //            // as if we were not even here.
-        //            m.Result = new IntPtr(HTTRANSPARENT);
-        //        }
-
-        //        return;  // bail out because we've handled the message
-        //    }
-
-        //    if (lockPage.Checked)
-        //    {
-        //        m.Result = new IntPtr(HTTRANSPARENT);
-        //        // return;
-        //    }
-
-        //    // Otherwise, call the base class implementation for default processing.
-        //    base.WndProc(ref m);
-        //}
-
-        //public Form1()
-        //{
-        //    InitializeComponent();
-        //}
     }
 }
