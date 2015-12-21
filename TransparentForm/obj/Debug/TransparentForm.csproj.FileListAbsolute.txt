@@ -9,11 +9,10 @@ c:\users\tacke\documents\visual studio 2015\Projects\TransparentForm\Transparent
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\bin\Debug\TransparentForm.exe.config
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\bin\Debug\TransparentForm.exe
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\bin\Debug\TransparentForm.pdb
-C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.csprojResolveAssemblyReference.cache
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\Interop.Shell32.dll
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.csproj.ResolveComReference.cache
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.Form1.resources
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.Properties.Resources.resources
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.csproj.GenerateResource.Cache
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.exe
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.pdb
-C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\Interop.Shell32.dll
-C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.csproj.ResolveComReference.cache
-C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.Form1.resources
