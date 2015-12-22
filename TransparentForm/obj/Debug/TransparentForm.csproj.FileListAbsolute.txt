@@ -16,3 +16,4 @@ C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\Transpar
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.csproj.GenerateResource.Cache
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.exe
 C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.pdb
+C:\Users\tacke\Source\Repos\transparentWindow\TransparentForm\obj\Debug\TransparentForm.csprojResolveAssemblyReference.cache

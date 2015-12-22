@@ -17,11 +17,8 @@ namespace TransparentForm
         {
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
-            Form1 form = new Form1();
 
-            //Form1._hookID = Form1.SetHook(Form1._proc);
-            Application.Run(form);
-            //Form1.UnhookWindowsHookEx(Form1._hookID);
+            Application.Run(new Form1());
         }
     }
 }

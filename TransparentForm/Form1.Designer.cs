@@ -30,7 +30,15 @@ namespace TransparentForm
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.Tag = "Click to Unlock Transparent Browser";
+            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip1.ToolTipTitle = "Click to Unlock Transparent Browser";
             // 
             // Form1
             // 
@@ -43,6 +51,8 @@ namespace TransparentForm
         }
 
         #endregion
+
+        private ToolTip toolTip1;
     }
 }
 
