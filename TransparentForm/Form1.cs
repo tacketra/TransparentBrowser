@@ -17,12 +17,8 @@ namespace TransparentForm
 
     public partial class Form1 : Form
     {
-        //[System.Runtime.InteropServices.DllImport("user32.dll")]
-        //static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
-
         Form LockForm { get; set; } = new Form();
         bool pageLocked = false;
-        bool IsFullScreen = false;
 
         public Form1() :base()
         {
@@ -30,14 +26,13 @@ namespace TransparentForm
             InitializeForm();
             this.LockFormLoad();
             this.LockForm.Owner = this;
-
+            this.LockForm.ShowInTaskbar = false;
+            
             this.Shown += new EventHandler(Form1_Shown);
             this.SizeChanged += new EventHandler(Form1_SizeChange);
             this.LocationChanged += new EventHandler(Form1_LocationChanged);
             this.VisibleChanged += new EventHandler(Form1_VisibleChange);
             
-
-            //this.LockForm.Load += new EventHandler(LockForm_Load);
             this.LockForm.MouseDown += new MouseEventHandler(LockForm_MouseClick);
             this.LockForm.Click += new EventHandler(LockForm_Click);
             webBrowser1.CanGoBackChanged += new EventHandler(webBrowser1_CanGoBackChanged);
@@ -84,7 +79,13 @@ namespace TransparentForm
 
         private void Form1_SizeChange(object sender, System.EventArgs e)
         {
-            this.LockForm.Location = new Point(this.Left + (this.Width/2), this.Top + 5);
+            int top = this.Top;
+            if (this.WindowState == FormWindowState.Maximized && !pageLocked)
+            {
+                top += 7;
+            }
+
+            this.LockForm.Location = new Point(this.Left + (this.Width/2), top);
         }
 
         private void Form1_LocationChanged(object sender, System.EventArgs e)
@@ -374,30 +375,18 @@ namespace TransparentForm
             scrollLabel.TextAlign = ContentAlignment.MiddleCenter;
 
             // Set up the TrackBar.
-            //this.trackBar1.Location = new System.Drawing.Point(scrollLabel.Right);
             this.scrollLabel.Location = new System.Drawing.Point(toolStripTextBox1.Bounds.Right + 2);
             this.trackBar1.Location = new System.Drawing.Point(scrollLabel.Right + 2);
             this.trackBar1.Size = new System.Drawing.Size(224, 10);
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
 
-            // this.lockPageLabel.Location = new Point(trackBar1.Right + 2);
-            // this.lockPageLabel.Text = "LOCK";
- 
-            // this.lockPageLabel.TextAlign = ContentAlignment.MiddleRight;
-
-            // this.lockPage.Location = new Point(lockPageLabel.Right + 2);
-            // this.lockPage.CheckedChanged += new EventHandler(lockPage_Check);
-            // this.ControlRemoved += new ControlEventHandler(Control_Removed);
-            //this.lockPage.LocationChanged += new EventHandler(lockPage_LocationChanged);
-            //this.lockPage.TextAlign = ContentAlignment.MiddleLeft;
- 
             trackBar1.Maximum = 100;
             trackBar1.TickFrequency = 5;
             trackBar1.LargeChange = 10;
             trackBar1.SmallChange = 5;
 
             this.Controls.AddRange(new Control[] {
-                scrollLabel, trackBar1, /*lockPage, lockPageLabel,*/ webBrowser1,
+                scrollLabel, trackBar1, webBrowser1,
                 toolStrip1, toolStrip2, statusStrip1});
 
             this.nonBrowserArray = new Control[5] { scrollLabel, trackBar1, toolStrip1, toolStrip2, statusStrip1  };
@@ -416,67 +405,67 @@ namespace TransparentForm
         }
 
         //TODO delete this after confirming not needed
-        private void lockPage_Set(object sender, EventArgs e)
-        {
-            if (pageLocked)
-            {
-                pageLocked = true;
-                /* have to set to formWindowState.normal because some weird bug where if windows form
-                is already full screen (but not covering task bar) maximizing won't cover task bar?*/
-                this.WindowState = System.Windows.Forms.FormWindowState.Normal;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None; //changeback
-                this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-                this.Bounds = Screen.FromControl(this).Bounds;
-                this.TopMost = true;
-                this.LockForm.TopMost = true;
+        //private void lockPage_Set(object sender, EventArgs e)
+        //{
+        //    if (pageLocked)
+        //    {
+        //        pageLocked = true;
+        //        /* have to set to formWindowState.normal because some weird bug where if windows form
+        //        is already full screen (but not covering task bar) maximizing won't cover task bar?*/
+        //        this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+        //        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None; //changeback
+        //        this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+        //        this.Bounds = Screen.FromControl(this).Bounds;
+        //        this.TopMost = true;
+        //        this.LockForm.TopMost = true;
 
-                for (int i = 0; i < nonBrowserArray.Length; i++)
-                {
-                    this.Controls.Remove(this.nonBrowserArray[i]);
-                }
+        //        for (int i = 0; i < nonBrowserArray.Length; i++)
+        //        {
+        //            this.Controls.Remove(this.nonBrowserArray[i]);
+        //        }
 
-                this.LockForm.Show();
-            }
-            else
-            {
-                this.WindowState = FormWindowState.Maximized;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-                this.TopMost = false;
+        //        this.LockForm.Show();
+        //    }
+        //    else
+        //    {
+        //        this.WindowState = FormWindowState.Maximized;
+        //        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+        //        this.TopMost = false;
 
-                this.Controls.AddRange(this.nonBrowserArray);
-            }
-        }
+        //        this.Controls.AddRange(this.nonBrowserArray);
+        //    }
+        //}
 
+        // TODO delte after confirming not needed
+        //private void lockPage_Check(object sender, EventArgs e)
+        //{
+        //    if (lockPage.Checked)
+        //    {
+        //        /* have to set to formWindowState.normal because some weird bug where if windows form
+        //        is already full screen (but not covering task bar) maximizing won't cover task bar?*/
+        //        this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+        //        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None; //changeback
+        //        this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+        //        this.Bounds = Screen.FromControl(this).Bounds;
+        //        this.TopMost = true;
+        //        this.LockForm.TopMost = true;
 
-        private void lockPage_Check(object sender, EventArgs e)
-        {
-            if (lockPage.Checked)
-            {
-                /* have to set to formWindowState.normal because some weird bug where if windows form
-                is already full screen (but not covering task bar) maximizing won't cover task bar?*/
-                this.WindowState = System.Windows.Forms.FormWindowState.Normal;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None; //changeback
-                this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-                this.Bounds = Screen.FromControl(this).Bounds;
-                this.TopMost = true;
-                this.LockForm.TopMost = true;
+        //        for (int i = 0; i < nonBrowserArray.Length; i++)
+        //        {
+        //            this.Controls.Remove(this.nonBrowserArray[i]);
+        //        }
 
-                for (int i = 0; i < nonBrowserArray.Length; i++)
-                {
-                    this.Controls.Remove(this.nonBrowserArray[i]);
-                }
+        //        this.LockForm.Show();
+        //    }
+        //    else
+        //    {
+        //        this.WindowState = FormWindowState.Maximized;
+        //        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+        //        this.TopMost = false;
 
-                this.LockForm.Show();
-            }
-            else
-            {
-                this.WindowState = FormWindowState.Maximized;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
-                this.TopMost = false;
-
-                this.Controls.AddRange(this.nonBrowserArray);
-            }
-        }
+        //        this.Controls.AddRange(this.nonBrowserArray);
+        //    }
+        //}
 
         protected override CreateParams CreateParams
         {
@@ -491,32 +480,67 @@ namespace TransparentForm
             }
         }
 
-        //protected override void WndProc(ref Message m)
-        //{
-        //    const int WM_NCHITTEST = 0x0084;
-        //    const int HTTRANSPARENT = (-1);
+        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        protected override void WndProc(ref Message m)
+        {
+            //const int WM_NCHITTEST = 0x0084;
+            //const int HTTRANSPARENT = (-1);
 
-        //    if (m.Msg == 0x0112) // WM_SYSCOMMAND
-        //    {
-        //        // Check your window state here
-        //        if (m.WParam == new IntPtr(0xF030)) // Maximize event - SC_MAXIMIZE from Winuser.h
-        //        {
-        //            this.IsFullScreen = true;
-        //            this.WindowState = System.Windows.Forms.FormWindowState.Normal;
-        //            //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-        //            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-        //            this.Bounds = Screen.FromControl(this).Bounds;
+            //if (m.Msg == 0x0112) // WM_SYSCOMMAND
+            //{
+            //    // Check your window state here
+            //    if (m.WParam == new IntPtr(0xF030)) // Maximize event - SC_MAXIMIZE from Winuser.h
+            //    {
+            //        this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+            //        //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            //        this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            //        this.Bounds = Screen.FromControl(this).Bounds;
 
-        //            this.LockForm.Location = new Point(Screen.FromControl(this).Bounds.Width/2, 0);
-        //        }
-        //    }
-        //    //else if (m.Msg == WM_NCHITTEST)
-        //    //{
-        //    //    m.Result = (IntPtr)HTTRANSPARENT;
-        //    //}
+            //        this.LockForm.Location = new Point(Screen.FromControl(this).Bounds.Width / 2, 0);
+            //    }
+            //}
+            //else if (m.Msg == WM_NCHITTEST)
+            //{
+            //    m.Result = (IntPtr)HTTRANSPARENT;
+            //}
 
-        //    base.WndProc(ref m);
-        //}
+            switch (m.Msg)
+            {
+                case 0x0006:
+                    break; // set focus
+                case 0x0047:
+                    break; // win pos changed
+                case 0x0007:
+                    break;
+                case 0x201:
+                    //left button down
+                    break;
+                case 0x202:
+                    //left button up, ie. a click
+                    break;
+                case 0x203:
+                    //left button double click
+                    break;
+                case 0x0024:
+                    break;
+                case 0x0000://NOREDRAW = 0x0008,
+                    break;
+                case 0x0010:
+                    break;//NOACTIVATE = 0x0010,
+                case 0x0020:
+                    break;//DRAWFRAME = 0x0020,//FRAMECHANGED = 0x0020,
+                case 0x0040:
+                    break;//SHOWWINDOW = 0x0040,
+                case 0x0080:
+                    break;//HIDEWINDOW = 0x0080,
+                case 0x0100:
+                    break;//NOCOPYBITS = 0x0100,
+                case 0x0200:
+                    break;//NOOWNERZORDER = 0x0200,//NOREPOSITION = 0x0200,
+            }
+
+            base.WndProc(ref m);
+        }
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -534,11 +558,20 @@ namespace TransparentForm
             {
                 /* have to set to formWindowState.normal because some weird bug where if windows form
                 is already full screen (but not covering task bar) maximizing won't cover task bar?*/
-                this.WindowState = System.Windows.Forms.FormWindowState.Normal;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None; //changeback
-                this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-                this.Bounds = Screen.FromControl(this).Bounds;
-                this.LockForm.BackgroundImage = TransparentForm.Properties.Resources.unlock_img;//Image
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                this.webBrowser1.ScrollBarsEnabled = false;
+
+                if (this.WindowState == FormWindowState.Maximized)
+                {
+                    // regardless after you click on the screen anywhere after this form covers taskbar , taskbar pops back up
+
+                    //this.WindowState = FormWindowState.Normal;
+                    //this.WindowState = FormWindowState.Maximized;
+                    //this.Bounds = Screen.FromControl(this).Bounds;
+                    
+                }
+
+                this.LockForm.BackgroundImage = TransparentForm.Properties.Resources.unlock_img;
                 this.TopMost = true;
                 this.LockForm.TopMost = true;
 
@@ -549,13 +582,13 @@ namespace TransparentForm
             }
             else
             {
-                this.WindowState = FormWindowState.Maximized;
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+                this.webBrowser1.ScrollBarsEnabled = true;
                 this.TopMost = false;
 
                 this.Controls.AddRange(this.nonBrowserArray);
 
-                this.LockForm.BackgroundImage = TransparentForm.Properties.Resources.lock_img;//Image
+                this.LockForm.BackgroundImage = TransparentForm.Properties.Resources.lock_img;
             }
 
             return;
