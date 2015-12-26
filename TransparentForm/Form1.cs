@@ -19,9 +19,12 @@ namespace TransparentForm
     {
         Form LockForm { get; set; } = new Form();
         bool pageLocked = false;
+        IntPtr taskBarHandle;
 
         public Form1() :base()
         {
+            this.taskBarHandle = FindWindow("Shell_TrayWnd", null);
+
             InitializeComponent();
             InitializeForm();
             this.LockFormLoad();
@@ -483,62 +486,6 @@ namespace TransparentForm
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
         protected override void WndProc(ref Message m)
         {
-            //const int WM_NCHITTEST = 0x0084;
-            //const int HTTRANSPARENT = (-1);
-
-            //if (m.Msg == 0x0112) // WM_SYSCOMMAND
-            //{
-            //    // Check your window state here
-            //    if (m.WParam == new IntPtr(0xF030)) // Maximize event - SC_MAXIMIZE from Winuser.h
-            //    {
-            //        this.WindowState = System.Windows.Forms.FormWindowState.Normal;
-            //        //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            //        this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            //        this.Bounds = Screen.FromControl(this).Bounds;
-
-            //        this.LockForm.Location = new Point(Screen.FromControl(this).Bounds.Width / 2, 0);
-            //    }
-            //}
-            //else if (m.Msg == WM_NCHITTEST)
-            //{
-            //    m.Result = (IntPtr)HTTRANSPARENT;
-            //}
-
-            switch (m.Msg)
-            {
-                case 0x0006:
-                    break; // set focus
-                case 0x0047:
-                    break; // win pos changed
-                case 0x0007:
-                    break;
-                case 0x201:
-                    //left button down
-                    break;
-                case 0x202:
-                    //left button up, ie. a click
-                    break;
-                case 0x203:
-                    //left button double click
-                    break;
-                case 0x0024:
-                    break;
-                case 0x0000://NOREDRAW = 0x0008,
-                    break;
-                case 0x0010:
-                    break;//NOACTIVATE = 0x0010,
-                case 0x0020:
-                    break;//DRAWFRAME = 0x0020,//FRAMECHANGED = 0x0020,
-                case 0x0040:
-                    break;//SHOWWINDOW = 0x0040,
-                case 0x0080:
-                    break;//HIDEWINDOW = 0x0080,
-                case 0x0100:
-                    break;//NOCOPYBITS = 0x0100,
-                case 0x0200:
-                    break;//NOOWNERZORDER = 0x0200,//NOREPOSITION = 0x0200,
-            }
-
             base.WndProc(ref m);
         }
 
@@ -549,26 +496,29 @@ namespace TransparentForm
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(String sClassName, String sAppName);
+
 
         private void LockForm_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            
+
             this.pageLocked = !this.pageLocked;
 
             if (pageLocked)
             {
                 /* have to set to formWindowState.normal because some weird bug where if windows form
                 is already full screen (but not covering task bar) maximizing won't cover task bar?*/
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                this.FormBorderStyle = FormBorderStyle.None;
                 this.webBrowser1.ScrollBarsEnabled = false;
 
                 if (this.WindowState == FormWindowState.Maximized)
                 {
                     // regardless after you click on the screen anywhere after this form covers taskbar , taskbar pops back up
-
                     //this.WindowState = FormWindowState.Normal;
                     //this.WindowState = FormWindowState.Maximized;
                     //this.Bounds = Screen.FromControl(this).Bounds;
-                    
                 }
 
                 this.LockForm.BackgroundImage = TransparentForm.Properties.Resources.unlock_img;
